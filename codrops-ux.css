@@ -1,0 +1,269 @@
+/*
+  Codrops-inspired UX layer for FoundationISTQB
+  Purpose: add visual depth, motion, scroll reveal, microinteractions and modern UI polish
+  without changing page text or base educational structure.
+*/
+
+:root{
+  --ux-glow-blue: rgba(0, 163, 224, .26);
+  --ux-glow-orange: rgba(245, 130, 32, .24);
+  --ux-glow-green: rgba(104, 181, 69, .20);
+  --ux-glow-purple: rgba(109, 70, 201, .22);
+  --ux-card-lift: 0 26px 60px rgba(8, 52, 95, .16);
+  --ux-transition: 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+body{
+  background-size: 140% 140%;
+  animation: ux-bg-drift 18s ease-in-out infinite alternate;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    radial-gradient(circle at 20% 12%, var(--ux-glow-blue), transparent 24%),
+    radial-gradient(circle at 80% 18%, var(--ux-glow-orange), transparent 24%),
+    radial-gradient(circle at 55% 92%, var(--ux-glow-green), transparent 28%);
+  opacity:.72;
+  filter: blur(2px);
+}
+
+@keyframes ux-bg-drift{
+  0%{background-position:0% 0%}
+  100%{background-position:100% 100%}
+}
+
+.hero,
+.brand,
+.panel,
+.card,
+.metric,
+.mini-card,
+.side,
+.persona,
+.q,
+.stat,
+.review{
+  transform-style:preserve-3d;
+}
+
+.hero{
+  isolation:isolate;
+}
+
+.hero::after{
+  animation: ux-float 8s ease-in-out infinite alternate;
+}
+
+@keyframes ux-float{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(-18px,-12px,0) scale(1.06)}
+}
+
+.card,
+.panel{
+  position:relative;
+}
+
+.card::after,
+.panel::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(135deg, rgba(255,255,255,.40), transparent 34%, rgba(255,255,255,.18));
+  opacity:.34;
+  mix-blend-mode:screen;
+}
+
+.card:hover,
+.panel:hover,
+.mini-card:hover,
+.metric:hover,
+.persona:hover,
+.stat:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--ux-card-lift);
+}
+
+.card,
+.panel,
+.mini-card,
+.metric,
+.persona,
+.stat,
+.option,
+.qnav,
+.btn,
+.primary,
+.answer,
+.node{
+  transition:
+    transform var(--ux-transition),
+    box-shadow var(--ux-transition),
+    border-color var(--ux-transition),
+    background var(--ux-transition),
+    color var(--ux-transition),
+    opacity var(--ux-transition);
+}
+
+nav a{
+  position:relative;
+  overflow:hidden;
+}
+
+nav a::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  top:50%;
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  background:currentColor;
+  opacity:0;
+  transform:translateY(-50%) scale(.4);
+  transition:var(--ux-transition);
+}
+
+nav a:hover,
+nav a.active{
+  padding-left:24px;
+}
+
+nav a:hover::before,
+nav a.active::before{
+  opacity:.75;
+  transform:translateY(-50%) scale(1);
+}
+
+.node,
+.pill,
+.chapter-tag,
+.eyebrow,
+.author{
+  box-shadow:0 8px 22px rgba(8,52,95,.05);
+}
+
+.node:hover{
+  transform:translateY(-2px) scale(1.015);
+}
+
+.flow .arrow{
+  opacity:.65;
+  transform:translateY(-1px);
+}
+
+.option:hover,
+.answer:hover,
+.qnav:hover:not(:disabled),
+.btn:hover,
+.primary:hover{
+  filter:saturate(1.06);
+}
+
+.option:hover .badge{
+  transform:scale(1.04);
+}
+
+.badge{
+  transition:transform var(--ux-transition), background var(--ux-transition), color var(--ux-transition);
+}
+
+.study-tools,
+.side{
+  border-color:rgba(215,228,239,.78);
+}
+
+.study-tools::before{
+  content:"";
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--blue, #0072bc), var(--orange, #f58220));
+  box-shadow:0 0 0 6px rgba(0,114,188,.08);
+}
+
+.table-wrap,
+table{
+  backdrop-filter:blur(8px);
+}
+
+section.card,
+.panel{
+  scroll-margin-top:24px;
+}
+
+[data-ux-reveal]{
+  opacity:0;
+  transform:translateY(22px) scale(.985);
+}
+
+[data-ux-reveal].ux-in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+[data-ux-reveal],
+[data-ux-reveal].ux-in{
+  transition:opacity 580ms cubic-bezier(.2,.8,.2,1), transform 580ms cubic-bezier(.2,.8,.2,1);
+}
+
+.ux-pointer-glow{
+  position:fixed;
+  width:220px;
+  height:220px;
+  border-radius:999px;
+  pointer-events:none;
+  z-index:0;
+  opacity:.42;
+  background:radial-gradient(circle, rgba(0,163,224,.18), rgba(245,130,32,.08) 42%, transparent 68%);
+  transform:translate(-50%,-50%);
+  mix-blend-mode:multiply;
+  transition:opacity 180ms ease;
+}
+
+body.ux-no-pointer .ux-pointer-glow{
+  display:none;
+}
+
+@media(max-width:900px){
+  .ux-pointer-glow{display:none}
+  .card:hover,
+  .panel:hover,
+  .mini-card:hover,
+  .metric:hover,
+  .persona:hover,
+  .stat:hover{
+    transform:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body{animation:none!important}
+  .hero::after{animation:none!important}
+  [data-ux-reveal],
+  [data-ux-reveal].ux-in,
+  .card,
+  .panel,
+  .mini-card,
+  .metric,
+  .persona,
+  .stat,
+  .option,
+  .qnav,
+  .btn,
+  .primary,
+  .answer,
+  .node,
+  nav a,
+  nav a::before{
+    transition:none!important;
+    transform:none!important;
+  }
+}
